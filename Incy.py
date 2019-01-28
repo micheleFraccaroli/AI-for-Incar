@@ -19,8 +19,6 @@ class Incy:
     if K.backend() == 'tensorflow':
         K.set_image_data_format("channels_last")
 
-    print(keras.__version__)
-
     def train_network(self):
         epoch = 500
         batch_size = 69
@@ -39,10 +37,10 @@ class Incy:
         model.add(Dense(96, activation='relu'))
         model.add(Dropout(0.4))
         model.add(Dense(12, activation='relu'))
-        model.add(Dense(1, activation='softmax'))
+        model.add(Dense(2, activation='softmax'))
 
         opt = Adamax(lr = learning_rate)
-        model.compile(loss="binary_crossentropy",
+        model.compile(loss="sparse_categorical_crossentropy",
                       optimizer=opt, metrics=['accuracy'])
 
         # FIT AND EVALUATE --------------------------------------------------------------
