@@ -10,7 +10,7 @@ os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 
 class Use:
 	def usage(self):
-		model = load_model('accelerometer_inference.h5')
+		model = load_model('ANN_inference.h5')
 
 		lgen = lg()
 		test_data = np.loadtxt("Test/test_data.txt", delimiter=" ")
@@ -19,7 +19,7 @@ class Use:
 			data = [i]
 			#data = [[7.202, -0.306, 6.129]]
 			data = np.array(data)
-			data = np.expand_dims(data,axis=2)
+			#data = np.expand_dims(data,axis=2)
 
 			#print(data.shape)
 
