@@ -9,10 +9,10 @@ import keras
 import tensorflow as tf
 from tensorflow import keras
 from keras import backend as K
-from keras.callbacks import TensorBoard
-from keras.layers import (Activation, Dense, Dropout, Flatten)
-from keras.models import Sequential
-from keras.optimizers import (Adam, Adamax)
+from tensorflow.python.keras.callbacks import TensorBoard
+from tensorflow.python.keras.layers import (Activation, Dense, Dropout, Flatten, LSTM)
+from tensorflow.python.keras.models import Sequential
+from tensorflow.python.keras.optimizers import (Adam, Adamax)
 from labels_gen import labels_gen as lg
 
 class Incy:
@@ -28,15 +28,23 @@ class Incy:
         # NEURAL NET --------------------------------------------------------------------
 
         model = Sequential()
-        model.add(Dense(96, input_dim=input_dim, activation='relu'))
-        model.add(Dense(96, activation='relu'))
-        model.add(Dense(96, activation='relu'))
-        model.add(Dropout(0.4))
-        model.add(Dense(96, activation='relu'))
-        model.add(Dense(96, activation='relu'))
-        model.add(Dense(96, activation='relu'))
-        model.add(Dropout(0.4))
-        model.add(Dense(12, activation='relu'))
+        #model.add(Dense(96, input_dim=input_dim, activation='relu'))
+        # model.add(Dense(96, activation='relu'))
+        # model.add(Dense(96, activation='relu'))
+        # model.add(Dropout(0.4))
+        # model.add(Dense(96, activation='relu'))
+        # model.add(Dense(96, activation='relu'))
+        # model.add(Dense(96, activation='relu'))
+        # model.add(Dropout(0.4))
+
+        model.add(LSTM(450, input_shape=(3,1), activation='relu'))
+        model.add(Dense(280, activation='relu'))
+        model.add(Dense(280, activation='relu'))
+        model.add(Dropout(0.45))
+        model.add(Dense(280, activation='relu'))
+        model.add(Dense(280, activation='relu'))
+        model.add(Dropout(0.45))
+        model.add(Dense(180, activation='relu'))
         model.add(Dense(2, activation='softmax'))
 
         opt = Adamax(lr = learning_rate)
@@ -44,7 +52,8 @@ class Incy:
                       optimizer=opt, metrics=['accuracy'])
 
         # FIT AND EVALUATE --------------------------------------------------------------
-        
+        tensorboard = TensorBoard(log_dir="logs/{}".format(time()) + "-->" + str(i))
+
         lgen = lg()
 
         train_data = np.loadtxt("Training/train_data.txt", delimiter=" ")
@@ -55,7 +64,10 @@ class Incy:
         label_test = lgen.generate(
             "ACC_Yauto_test/Test_Auto.txt", "ACC_Nauto_test/Test_AutoN.txt")
 
-        model.fit(train_data, label_train, epochs=epoch, batch_size=batch_size)
+        train_data = np.expand_dims(train_data, axis=2)
+        test_data = np.expand_dims(test_data, axis=2)
+
+        model.fit(train_data, label_train, epochs=epoch, batch_size=batch_size,callbacks=[tensorboard])
         res = model.evaluate(test_data, label_test)
         print("\n\nRESULT: %s: %.2f%%" % (model.metrics_names[1], res[1] * 100))
         

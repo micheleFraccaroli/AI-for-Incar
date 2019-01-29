@@ -15,20 +15,21 @@ class Use:
 		lgen = lg()
 		test_data = np.loadtxt("Test/test_data.txt", delimiter=" ")
 		
-		#for i in test_data:
-		#data = [i]
-		data = [[7.202, -0.306, 6.129]]
-		data = np.array(data)
+		for i in test_data:
+			data = [i]
+			#data = [[7.202, -0.306, 6.129]]
+			data = np.array(data)
+			data = np.expand_dims(data,axis=2)
 
-		#print(data.shape)
+			#print(data.shape)
 
-		res = model.predict(data)
-		if(np.argmax(res) == 0):
-			res = 'no auto'
-		else:
-			res = 'auto'
+			res = model.predict(data)
+			if(np.argmax(res) == 0):
+				res = 'no auto'
+			else:
+				res = 'auto'
 
-		print(res)
+			print(res)
 
 if __name__ == '__main__':
 	u = Use()
