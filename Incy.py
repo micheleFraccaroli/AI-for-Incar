@@ -10,7 +10,7 @@ import tensorflow as tf
 from tensorflow import keras
 from keras import backend as K
 from keras.callbacks import TensorBoard
-from keras.layers import (Activation, Dense, Dropout, Flatten, LSTM)
+from keras.layers import (Activation, Dense, Dropout, Flatten, LSTM, SimpleRNN)
 from keras.models import Sequential
 from keras.optimizers import (Adam, Adamax)
 from labels_gen import labels_gen as lg
@@ -37,15 +37,15 @@ class Incy:
         model.add(Dense(96, activation='relu'))
         model.add(Dropout(0.4))
 
-        # model.add(LSTM(450, input_shape=(3,1), activation='relu'))
+        # model.add(SimpleRNN(450, input_shape=(3,1), activation='relu'))
         # model.add(Dense(280, activation='relu'))
         # model.add(Dense(280, activation='relu'))
         # model.add(Dropout(0.45))
         # model.add(Dense(180, activation='relu'))
         # model.add(Dense(180, activation='relu'))
         # model.add(Dropout(0.45))
-        # model.add(Dense(96, activation='relu'))
-        # model.add(Dense(2, activation='softmax'))
+        model.add(Dense(96, activation='relu'))
+        model.add(Dense(2, activation='softmax'))
 
         opt = Adamax(lr = learning_rate)
         model.compile(loss="sparse_categorical_crossentropy",

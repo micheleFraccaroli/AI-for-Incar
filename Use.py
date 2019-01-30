@@ -15,8 +15,11 @@ class Use:
 		lgen = lg()
 		test_data = np.loadtxt("Test/test_data.txt", delimiter=" ")
 		
-		for i in test_data:
-			data = [i]
+		test_data = test_data[98:]
+
+		list_res = []
+		for i in range(20):
+			data = [test_data[i]]
 			#data = [[7.202, -0.306, 6.129]]
 			data = np.array(data)
 			#data = np.expand_dims(data,axis=2)
@@ -29,8 +32,16 @@ class Use:
 			else:
 				res = 'auto'
 
-			print(res)
+			list_res.append(res)
+
+		return list_res
+
+	def verdict(self, list_res):
+		print("Auto 	→ " ,list_res.count("auto"))
+		print("No auto  → " ,list_res.count("no auto"))
 
 if __name__ == '__main__':
 	u = Use()
-	u.usage()
+	l = u.usage()
+	#print(l)
+	u.verdict(l)
